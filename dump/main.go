@@ -10,7 +10,7 @@ func main() {
 	var cfg app.Config
 	println("Dump")
 	flgNoOffset := pflag.BoolP("no-offset", "n", false, "'true' to hide file offsets")
-	pflag.BoolVarP(&cfg.Hexy, "hex", "h", true, "prints hex values")
+	pflag.BoolVarP(&cfg.Hex, "hex", "h", true, "prints hex values")
 	pflag.StringVarP(&cfg.InputFile, "inputfile", "i", "", "input file name")
 
 	pflag.Parse()
@@ -21,9 +21,10 @@ func main() {
 		println("offset off")
 	}
 
-	if cfg.Hexy {
+	if cfg.Hex {
 		println("Hex mode")
 	}
 
 	println("Using ", cfg.InputFile)
+	app.Process(&cfg)
 }
