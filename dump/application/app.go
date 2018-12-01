@@ -2,8 +2,7 @@ package application
 
 import (
 	"ShellToolKit/dump/infrastructure"
-
-	"fmt"
+	"os"
 )
 
 // Config struct to hold settings
@@ -17,22 +16,43 @@ type Config struct {
 	InputFile  string
 	OutputFile string
 	Offset     int
-	Seek       int
-	Len        int
+	Seek       int64
+	Len        int64
 	Text       bool
 }
 
-func hexProcessor(block []byte, count int) int {
-	fmt.Println("block.", count)
-	return 0
+func buildLineProcessor(cfg *Config) LineProcessor {
+	return func(outFile *os.File, chunk []byte, offset int, pos int64) {
+		print(".")
+	}
+}
+
+func buildProcessor(cfg *Config, processLine LineProcessor) infrastructure.BlockProcessor {
+	return func(outFile *os.File, block []byte, count int, pos int64) int {
+		m := 16
+		for n := 0; n < count; n += 16 {
+			if m > count {
+				m = count
+			}
+
+			processLine(outFile, block[n:m], n, pos)
+			m += 16
+		}
+		return count
+	}
 }
 
 // Process is the main entry point to dispatch processor functions
+// Read file // Buffering // Transformation // Output
 func Process(cfg *Config) {
-	// Read file
-	// Buffering
-	// Transformation
-	// Output
+	inFile := infrastructure.OpenInputFile(cfg.InputFile)
+	outFile := infrastructure.OpenOutputFile(cfg.OutputFile)
 
-	infrastructure.ProcessFile(cfg.InputFile, hexProcessor)
+	defer infrastructure.CloseFile(outFile)
+	defer infrastructure.CloseFile(inFile)
+
+	blockProcessor := buildProcessor(cfg, buildLineProcessor(cfg))
+
+	infrastructure.ProcessAllFile(inFile, outFile, cfg.Seek, blockProcessor)
+
 }

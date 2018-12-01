@@ -20,8 +20,8 @@ func parseConfigArgumentsSetup(cfg *app.Config) {
 	pflag.StringVarP(&cfg.OutputFile, "outputfile", "o", "", "input file name (default stdout)")
 
 	pflag.IntVarP(&cfg.Offset, "offset", "O", 0, "adds offset to displayed position")
-	pflag.IntVarP(&cfg.Seek, "seek", "s", 0, "starts from the offset")
-	pflag.IntVarP(&cfg.Len, "len", "l", math.MaxInt32, "reads up to len bytes")
+	pflag.Int64VarP(&cfg.Seek, "seek", "s", 0, "starts from the offset")
+	pflag.Int64VarP(&cfg.Len, "len", "l", math.MaxInt64, "reads up to len bytes")
 
 	pflag.BoolVarP(&cfg.Text, "text", "t", false, "prints text dump")
 }
