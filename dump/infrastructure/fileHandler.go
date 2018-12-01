@@ -72,5 +72,6 @@ func ProcessAllFile(inFile, outFile *os.File, startAt int64, processor BlockProc
 			break
 		}
 		processor(outFile, buffer, n, pos)
+		pos += int64(n)
 	}
 }

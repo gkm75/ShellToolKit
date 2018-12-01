@@ -22,8 +22,28 @@ type Config struct {
 }
 
 func buildLineProcessor(cfg *Config) LineProcessor {
-	return func(outFile *os.File, chunk []byte, offset int, pos int64) {
-		print(".")
+	var _chain []LineProcessor
+
+	if cfg.Address {
+		if cfg.Offset == 0 {
+			_chain = append(_chain, WritePosition)
+		} else {
+			_chain = append(_chain, WritePositionWithOffset)
+		}
+	}
+
+	if cfg.Text {
+		_chain = append(_chain, WriteText)
+	}
+
+	if !cfg.NoBreak {
+		_chain = append(_chain, WriteLn)
+	}
+
+	return func(cfg *Config, outFile *os.File, chunk []byte, offset int, pos int64) {
+		for _, p := range _chain {
+			p(cfg, outFile, chunk, offset, pos)
+		}
 	}
 }
 
@@ -35,7 +55,7 @@ func buildProcessor(cfg *Config, processLine LineProcessor) infrastructure.Block
 				m = count
 			}
 
-			processLine(outFile, block[n:m], n, pos)
+			processLine(cfg, outFile, block[n:m], n, pos+int64(n))
 			m += 16
 		}
 		return count
