@@ -32,6 +32,18 @@ func buildLineProcessor(cfg *Config) LineProcessor {
 		}
 	}
 
+	if cfg.Hex {
+		if cfg.Upper {
+			_chain = append(_chain, HexProcessorUpper)
+		} else {
+			_chain = append(_chain, HexProcessor)
+		}
+	}
+
+	if cfg.Oct {
+		_chain = append(_chain, OctProcessor)
+	}
+
 	if cfg.Text {
 		_chain = append(_chain, WriteText)
 	}

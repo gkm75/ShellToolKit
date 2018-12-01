@@ -35,7 +35,32 @@ func WriteLn(cfg *Config, outFile *os.File, block []byte, count int, pos int64) 
 	fmt.Fprintln(outFile)
 }
 
-func hexProcessor(outFile *os.File, block []byte, count int) int {
-	fmt.Println("block.", count)
-	return 0
+// HexProcessor HexProcessor
+func HexProcessor(cfg *Config, outFile *os.File, block []byte, count int, pos int64) {
+	for _, b := range block {
+		fmt.Fprintf(outFile, " %02x", b)
+	}
+	for n := len(block); n < 16; n++ {
+		fmt.Fprintf(outFile, "   ")
+	}
+}
+
+// HexProcessorUpper HexProcessorUpper
+func HexProcessorUpper(cfg *Config, outFile *os.File, block []byte, count int, pos int64) {
+	for _, b := range block {
+		fmt.Fprintf(outFile, " %02X", b)
+	}
+	for n := len(block); n < 16; n++ {
+		fmt.Fprintf(outFile, "   ")
+	}
+}
+
+// OctProcessor OctProcessor
+func OctProcessor(cfg *Config, outFile *os.File, block []byte, count int, pos int64) {
+	for _, b := range block {
+		fmt.Fprintf(outFile, " %03o", b)
+	}
+	for n := len(block); n < 16; n++ {
+		fmt.Fprintf(outFile, "    ")
+	}
 }
