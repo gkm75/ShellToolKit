@@ -8,13 +8,18 @@ import (
 
 // Config struct to hold settings
 type Config struct {
-	Offset     bool
-	Stream     bool
+	Address    bool
+	NoBreak    bool
 	Hex        bool
 	Bin        bool
 	Oct        bool
+	Upper      bool
 	InputFile  string
 	OutputFile string
+	Offset     int
+	Seek       int
+	Len        int
+	Text       bool
 }
 
 func hexProcessor(block []byte, count int) int {
