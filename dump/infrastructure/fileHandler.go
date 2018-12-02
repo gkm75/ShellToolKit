@@ -1,13 +1,14 @@
 package infrastructure
 
 import (
+	"bufio"
 	"io"
 	"log"
 	"os"
 )
 
 // BlockProcessor is a function type that processes the block part of the file passed
-type BlockProcessor func(*os.File, []byte, int, int64) int
+type BlockProcessor func(*bufio.Writer, []byte, int, int64) int
 
 // OpenInputFile opens a file or stdin if "" is passed
 func OpenInputFile(path string) *os.File {
@@ -50,7 +51,7 @@ func CloseFile(file *os.File) {
 }
 
 // ProcessAllFile opens the passed filename, reads chunks and calls the processor function passed as param
-func ProcessAllFile(inFile, outFile *os.File, startAt int64, processor BlockProcessor) {
+func ProcessAllFile(inFile *os.File, outFile *bufio.Writer, bufferSize int, startAt int64, processor BlockProcessor) {
 	var pos int64
 	var err error
 	if startAt > 0 {
@@ -60,7 +61,7 @@ func ProcessAllFile(inFile, outFile *os.File, startAt int64, processor BlockProc
 		}
 	}
 
-	buffer := make([]byte, 1024)
+	buffer := make([]byte, bufferSize)
 
 	for {
 		n, err := inFile.Read(buffer)

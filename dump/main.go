@@ -12,8 +12,9 @@ func parseConfigArgumentsSetup(cfg *app.Config) {
 	pflag.BoolVarP(&cfg.NoBreak, "no-break", "n", false, "prints the dump in one line")
 
 	pflag.BoolVarP(&cfg.Hex, "hex", "x", true, "prints hex values")
-	pflag.BoolVarP(&cfg.Oct, "oct", "8", false, "prints oct values")
-	pflag.BoolVarP(&cfg.Bin, "bin", "b", false, "prints bin values")
+	pflag.BoolVarP(&cfg.Oct, "oct", "8", false, "prints octal values")
+	pflag.BoolVarP(&cfg.Bin, "bin", "b", false, "prints binary values")
+	pflag.BoolVarP(&cfg.Dec, "dec", "d", false, "prints decimal values")
 	pflag.BoolVarP(&cfg.Upper, "upper", "u", false, "prints uppercase hex values")
 
 	pflag.StringVarP(&cfg.InputFile, "inputfile", "i", "", "input file name (default stdin)")

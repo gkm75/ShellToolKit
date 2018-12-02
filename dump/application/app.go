@@ -2,7 +2,7 @@ package application
 
 import (
 	"ShellToolKit/dump/infrastructure"
-	"os"
+	"bufio"
 )
 
 // Config struct to hold settings
@@ -12,6 +12,7 @@ type Config struct {
 	Hex        bool
 	Bin        bool
 	Oct        bool
+	Dec        bool
 	Upper      bool
 	InputFile  string
 	OutputFile string
@@ -44,6 +45,14 @@ func buildLineProcessor(cfg *Config) LineProcessor {
 		_chain = append(_chain, OctProcessor)
 	}
 
+	if cfg.Bin {
+		_chain = append(_chain, BinProcessor)
+	}
+
+	if cfg.Dec {
+		_chain = append(_chain, DecProcessor)
+	}
+
 	if cfg.Text {
 		_chain = append(_chain, WriteText)
 	}
@@ -52,23 +61,23 @@ func buildLineProcessor(cfg *Config) LineProcessor {
 		_chain = append(_chain, WriteLn)
 	}
 
-	return func(cfg *Config, outFile *os.File, chunk []byte, offset int, pos int64) {
+	return func(cfg *Config, outFile *bufio.Writer, chunk []byte, offset int, pos int64) {
 		for _, p := range _chain {
 			p(cfg, outFile, chunk, offset, pos)
 		}
 	}
 }
 
-func buildProcessor(cfg *Config, processLine LineProcessor) infrastructure.BlockProcessor {
-	return func(outFile *os.File, block []byte, count int, pos int64) int {
-		m := 16
-		for n := 0; n < count; n += 16 {
+func buildProcessor(cfg *Config, chunkSize int, processLine LineProcessor) infrastructure.BlockProcessor {
+	return func(outFile *bufio.Writer, block []byte, count int, pos int64) int {
+		m := chunkSize
+		for n := 0; n < count; n += chunkSize {
 			if m > count {
 				m = count
 			}
 
 			processLine(cfg, outFile, block[n:m], n, pos+int64(n))
-			m += 16
+			m += chunkSize
 		}
 		return count
 	}
@@ -79,12 +88,14 @@ func buildProcessor(cfg *Config, processLine LineProcessor) infrastructure.Block
 func Process(cfg *Config) {
 	inFile := infrastructure.OpenInputFile(cfg.InputFile)
 	outFile := infrastructure.OpenOutputFile(cfg.OutputFile)
+	writer := bufio.NewWriter(outFile)
 
-	defer infrastructure.CloseFile(outFile)
 	defer infrastructure.CloseFile(inFile)
+	defer infrastructure.CloseFile(outFile)
+	defer writer.Flush()
 
-	blockProcessor := buildProcessor(cfg, buildLineProcessor(cfg))
+	blockProcessor := buildProcessor(cfg, 8, buildLineProcessor(cfg))
 
-	infrastructure.ProcessAllFile(inFile, outFile, cfg.Seek, blockProcessor)
+	infrastructure.ProcessAllFile(inFile, writer, 1024, cfg.Seek, blockProcessor)
 
 }
