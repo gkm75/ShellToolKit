@@ -1,7 +1,7 @@
 package main
 
 import (
-	app "ShellToolKit/dump/application"
+	app "ShellToolKit/internal/application"
 	"math"
 
 	"github.com/spf13/pflag"

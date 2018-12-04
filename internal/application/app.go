@@ -1,7 +1,7 @@
 package application
 
 import (
-	"ShellToolKit/dump/infrastructure"
+	"ShellToolKit/pkg/infrastructure"
 	"bufio"
 )
 
