@@ -88,14 +88,12 @@ func buildProcessor(cfg *Config, chunkSize int, processLine LineProcessor) infra
 func Process(cfg *Config) {
 	inFile := infrastructure.OpenInputFile(cfg.InputFile)
 	outFile := infrastructure.OpenOutputFile(cfg.OutputFile)
-	writer := bufio.NewWriter(outFile)
 
 	defer infrastructure.CloseFile(inFile)
 	defer infrastructure.CloseFile(outFile)
-	defer writer.Flush()
 
 	blockProcessor := buildProcessor(cfg, 8, buildLineProcessor(cfg))
 
-	infrastructure.ProcessAllFile(inFile, writer, 1024, cfg.Seek, blockProcessor)
+	infrastructure.ProcessAllFileBlocks(inFile, outFile, 1024, cfg.Seek, blockProcessor)
 
 }

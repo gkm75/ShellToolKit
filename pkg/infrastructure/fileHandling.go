@@ -50,11 +50,12 @@ func CloseFile(file *os.File) {
 	}
 }
 
-// ProcessAllFile opens the passed filename, reads chunks and calls the processor function passed as param
-func ProcessAllFile(inFile *os.File, outFile *bufio.Writer, bufferSize int, startAt int64, processor BlockProcessor) {
+// ProcessAllFileBlocks opens the passed filename, reads chunks and calls the processor function passed as param
+func ProcessAllFileBlocks(inFile *os.File, outFile *os.File, bufferSize int, startAt int64, processor BlockProcessor) {
 	var pos int64
 	var err error
 	if startAt > 0 {
+
 		pos, err = inFile.Seek(startAt, 0)
 		if err != nil {
 			log.Fatal(err)
@@ -63,8 +64,13 @@ func ProcessAllFile(inFile *os.File, outFile *bufio.Writer, bufferSize int, star
 
 	buffer := make([]byte, bufferSize)
 
+	reader := bufio.NewReader(inFile)
+	writer := bufio.NewWriter(outFile)
+
+	defer writer.Flush()
+
 	for {
-		n, err := inFile.Read(buffer)
+		n, err := reader.Read(buffer)
 		if n <= 0 && err == io.EOF {
 			break
 		}
@@ -72,7 +78,7 @@ func ProcessAllFile(inFile *os.File, outFile *bufio.Writer, bufferSize int, star
 			log.Fatal("file read failed: ", err)
 			break
 		}
-		processor(outFile, buffer, n, pos)
+		processor(writer, buffer, n, pos)
 		pos += int64(n)
 	}
 }
