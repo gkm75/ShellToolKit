@@ -82,3 +82,41 @@ func ProcessAllFileBlocks(inFile *os.File, outFile *os.File, bufferSize int, sta
 		pos += int64(n)
 	}
 }
+
+// ProcessFileBlocks opens the passed filename, reads chunks till len size and calls the processor function passed as param
+func ProcessFileBlocks(inFile *os.File, outFile *os.File, bufferSize int, startAt int64, len int64, processor BlockProcessor) {
+	var pos int64
+	var err error
+	if startAt > 0 {
+
+		pos, err = inFile.Seek(startAt, 0)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	buffer := make([]byte, bufferSize)
+
+	reader := bufio.NewReader(inFile)
+	writer := bufio.NewWriter(outFile)
+
+	defer writer.Flush()
+
+	for {
+		n, err := reader.Read(buffer)
+		if n <= 0 && err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal("file read failed: ", err)
+			break
+		}
+		if len < int64(n) {
+			processor(writer, buffer, int(len), pos)
+			break
+		}
+		processor(writer, buffer, n, pos)
+		pos += int64(n)
+		len -= int64(n)
+	}
+}

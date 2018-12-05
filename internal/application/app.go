@@ -94,6 +94,6 @@ func Process(cfg *Config) {
 
 	blockProcessor := buildProcessor(cfg, 8, buildLineProcessor(cfg))
 
-	infrastructure.ProcessAllFileBlocks(inFile, outFile, 1024, cfg.Seek, blockProcessor)
+	infrastructure.ProcessFileBlocks(inFile, outFile, 1024, cfg.Seek, cfg.Len, blockProcessor)
 
 }

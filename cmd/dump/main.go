@@ -24,7 +24,7 @@ func parseConfigArgumentsSetup(cfg *app.Config) {
 	pflag.Int64VarP(&cfg.Seek, "seek", "s", 0, "starts from the offset")
 	pflag.Int64VarP(&cfg.Len, "len", "l", math.MaxInt64, "reads up to len bytes")
 
-	pflag.BoolVarP(&cfg.Text, "text", "t", false, "prints text dump")
+	pflag.BoolVarP(&cfg.Text, "text", "t", true, "prints text dump")
 }
 
 func main() {
