@@ -29,11 +29,18 @@ func main() {
 	pflag.Parse()
 
 	if *help {
-		println("Bin [options]")
+		println("bin [options] [files]")
 		pflag.Usage()
 	} else if *version {
-		println("Bin version 1.0.0")
+		println("bin version %s", common.Version)
 	} else {
-		app.Process(&cfg)
+		if pflag.NArg() == 0 {
+			app.Process(&cfg)
+		} else {
+			for _, filepath := range pflag.Args() {
+				cfg.InputFile = filepath
+				app.Process(&cfg)
+			}
+		}
 	}
 }

@@ -1,8 +1,8 @@
 package main
 
 import (
+	app "ShellToolKit/internal/cat"
 	"ShellToolKit/internal/common"
-	app "ShellToolKit/internal/hex"
 	"math"
 
 	"github.com/spf13/pflag"
@@ -10,12 +10,12 @@ import (
 
 func parseConfigArgumentsSetup(cfg *common.Config) {
 	pflag.BoolVarP(&cfg.NoBreak, "no-break", "n", false, "prints the dump in one line")
-	pflag.IntVarP(&cfg.Cols, "cols", "c", 16, "number of bytes per line")
-	pflag.BoolVarP(&cfg.Upper, "upper", "u", false, "prints uppercase hex values")
+	pflag.IntVarP(&cfg.Cols, "cols", "c", 8, "number of bytes per line")
 
 	pflag.StringVarP(&cfg.InputFile, "inputfile", "i", "", "input file name (default stdin)")
 	pflag.StringVarP(&cfg.OutputFile, "outputfile", "o", "", "input file name (default stdout)")
 
+	pflag.IntVarP(&cfg.Offset, "offset", "O", 0, "adds offset to displayed position")
 	pflag.Int64VarP(&cfg.Seek, "seek", "s", 0, "starts from the offset")
 	pflag.Int64VarP(&cfg.Len, "len", "l", math.MaxInt64, "reads up to len bytes")
 }
@@ -30,10 +30,10 @@ func main() {
 	pflag.Parse()
 
 	if *help {
-		println("Hex [options] [files]")
+		println("cat [options] [files]")
 		pflag.Usage()
 	} else if *version {
-		println("Hex version %s", common.Version)
+		println("cat version %s", common.Version)
 	} else {
 		if pflag.NArg() == 0 {
 			app.Process(&cfg)

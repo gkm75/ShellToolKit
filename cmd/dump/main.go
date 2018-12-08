@@ -40,11 +40,18 @@ func main() {
 	pflag.Parse()
 
 	if *help {
-		println("Dump [options]")
+		println("dump [options]  [files]")
 		pflag.Usage()
 	} else if *version {
-		println("Dump version 1.0.0")
+		println("dump version %s", common.Version)
 	} else {
-		app.Process(&cfg)
+		if pflag.NArg() == 0 {
+			app.Process(&cfg)
+		} else {
+			for _, filepath := range pflag.Args() {
+				cfg.InputFile = filepath
+				app.Process(&cfg)
+			}
+		}
 	}
 }

@@ -5,6 +5,9 @@ import (
 	"bufio"
 )
 
+// Version the toolkit verson
+const Version = "1.0.0.0"
+
 // Config struct to hold settings
 type Config struct {
 	Address    bool
