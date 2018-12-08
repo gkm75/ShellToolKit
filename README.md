@@ -9,7 +9,14 @@ Creates a dump in hex / dec / oct or bin values plus side text. The text is esca
 
 Prints the hexadecimal values of the bytes contained in a file.
 
+## dec
+
+Prints the decimal values of the bytes contained in a file.
+
+## oct
+
+Prints the octal values of the bytes contained in a file.
+
 ## bin
 
 Prints the binary values of the bytes contained in a file.
-
