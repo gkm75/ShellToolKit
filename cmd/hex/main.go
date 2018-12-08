@@ -10,6 +10,7 @@ import (
 
 func parseConfigArgumentsSetup(cfg *common.Config) {
 	pflag.BoolVarP(&cfg.NoBreak, "no-break", "n", false, "prints the dump in one line")
+	pflag.IntVarP(&cfg.Cols, "cols", "c", 16, "number of bytes per line")
 	pflag.BoolVarP(&cfg.Upper, "upper", "u", false, "prints uppercase hex values")
 
 	pflag.StringVarP(&cfg.InputFile, "inputfile", "i", "", "input file name (default stdin)")

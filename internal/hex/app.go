@@ -48,7 +48,7 @@ func Process(cfg *common.Config) {
 	defer infrastructure.CloseFile(inFile)
 	defer infrastructure.CloseFile(outFile)
 
-	blockProcessor := common.BuildProcessor(cfg, 8, buildLineProcessor(cfg))
+	blockProcessor := common.BuildProcessor(cfg, buildLineProcessor(cfg))
 
 	infrastructure.ProcessFileBlocks(inFile, outFile, 1024, cfg.Seek, cfg.Len, blockProcessor)
 }

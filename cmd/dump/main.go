@@ -12,6 +12,7 @@ import (
 func parseConfigArgumentsSetup(cfg *common.Config) {
 	pflag.BoolVarP(&cfg.Address, "show-position", "p", true, "'false' to hide file offsets")
 	pflag.BoolVarP(&cfg.NoBreak, "no-break", "n", false, "prints the dump in one line")
+	pflag.IntVarP(&cfg.Cols, "cols", "c", 8, "number of bytes per line")
 
 	pflag.BoolVarP(&cfg.Hex, "hex", "x", true, "prints hex values")
 	pflag.BoolVarP(&cfg.Oct, "oct", "8", false, "prints octal values")
