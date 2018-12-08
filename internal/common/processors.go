@@ -1,12 +1,9 @@
-package application
+package common
 
 import (
 	"bufio"
 	"fmt"
 )
-
-// LineProcessor function type
-type LineProcessor func(*Config, *bufio.Writer, []byte, int, int64)
 
 // WritePosition prints file position
 func WritePosition(cfg *Config, outFile *bufio.Writer, block []byte, count int, pos int64) {
