@@ -17,7 +17,7 @@ func buildLineProcessor(cfg *common.Config) common.LineProcessor {
 		}
 	}
 
-	if cfg.Hex {
+	if cfg.Base.Hex {
 		if cfg.Upper {
 			_chain = append(_chain, common.HexProcessorUpper)
 		} else {
@@ -25,15 +25,15 @@ func buildLineProcessor(cfg *common.Config) common.LineProcessor {
 		}
 	}
 
-	if cfg.Oct {
+	if cfg.Base.Oct {
 		_chain = append(_chain, common.OctProcessor)
 	}
 
-	if cfg.Bin {
+	if cfg.Base.Bin {
 		_chain = append(_chain, common.BinProcessor)
 	}
 
-	if cfg.Dec {
+	if cfg.Base.Dec {
 		_chain = append(_chain, common.DecProcessor)
 	}
 

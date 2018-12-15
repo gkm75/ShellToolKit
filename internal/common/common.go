@@ -13,10 +13,7 @@ type Config struct {
 	Address    bool
 	NoBreak    bool
 	Cols       int
-	Hex        bool
-	Bin        bool
-	Oct        bool
-	Dec        bool
+	Base       NumBase
 	Upper      bool
 	InputFile  string
 	OutputFile string
@@ -24,6 +21,10 @@ type Config struct {
 	Seek       int64
 	Len        int64
 	Text       bool
+}
+
+type NumBase struct {
+	Hex, Dec, Oct, Bin bool
 }
 
 // LineProcessor function type
